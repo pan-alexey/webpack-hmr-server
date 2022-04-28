@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "target": "ESNext",
+    "strict": true,
+    "removeComments": true,
+    "types": ["node", "webpack-env", "jest"],
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+  ],
+}
