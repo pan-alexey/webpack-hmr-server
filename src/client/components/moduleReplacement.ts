@@ -5,6 +5,7 @@
  *          https://github.com/webpack/webpack/blob/main/hot/only-dev-server.js
  * Original copyright Tobias Koppers @sokra (MIT license)
  */
+import { unique } from '../utils/index';
 
 export class ModuleReplacement {
   private lastHash = __webpack_hash__;
@@ -92,12 +93,13 @@ export class ModuleReplacement {
       return;
     }
 
-    if (renewedModules.length < 1) {
+    const uniqueRenewedModules = unique(renewedModules);
+    if (uniqueRenewedModules.length < 1) {
       return;
     }
 
     console.groupCollapsed('[HMR] reload modules');
-    renewedModules.forEach(function (moduleId) {
+    uniqueRenewedModules.forEach(function (moduleId) {
       console.log('[HMR]  - ' + moduleId);
     });
     console.groupEnd();
