@@ -1,6 +1,6 @@
 /* eslint-disable filenames/match-regex */
 import webpack from 'webpack';
-import webpackFixture from './mock/webpack.fixture';
+import webpackFixture from './__mocks__/webpack.fixture';
 import { memoStats, normlizeStatsError, convertStatsToModuleData } from '../webpack-sats';
 
 describe('WebpackStats', () => {
@@ -60,7 +60,11 @@ describe('WebpackStats', () => {
     expect(convertStatsToModuleData(notValidStats)).toBeNull();
 
     // webpack compile to memfs
-    const { compiler, fs } = webpackFixture('/index.js', 'production');
+    const { compiler, fs } = webpackFixture('/index.js', 'production', {
+      hints: 'warning',
+      maxEntrypointSize: 20,
+      maxAssetSize: 20,
+    });
 
     // Success compile
     fs.writeFileSync('/index.js', `const text='test'; console.log(text)`);

@@ -11,4 +11,5 @@ module.exports = {
   moduleDirectories: ['node_modules'],
   testRegex: '(/__tests__/.*|(\\.|/)(spec))\\.(jsx?|tsx?)$',
   moduleFileExtensions: ['ts', 'js', 'json', 'node'],
+  modulePathIgnorePatterns: ['__mocks__'],
 };

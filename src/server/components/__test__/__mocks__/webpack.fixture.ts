@@ -1,10 +1,15 @@
 // eslint-disable-next-line filenames/match-regex
-import webpack from 'webpack';
+import webpack, { web } from 'webpack';
 import { createFsFromVolume, Volume, IFs } from 'memfs';
 
 export default (
   entry?: string,
   mode?: 'production' | 'development',
+  performance?: {
+    hints?: false | 'error' | 'warning';
+    maxAssetSize?: number;
+    maxEntrypointSize?: number;
+  },
 ): {
   compiler: webpack.Compiler;
   fs: IFs;
@@ -13,23 +18,24 @@ export default (
   const volume = new Volume();
   const fs = createFsFromVolume(volume);
 
-  const compiler = webpack({
+  const webpackConfig: webpack.Configuration = {
     entry,
     mode,
     output: {
       filename: 'bundle.js',
       path: '/build',
     },
-    performance: {
-      hints: 'warning',
-      maxEntrypointSize: 20,
-      maxAssetSize: 20,
-    },
-  });
+  };
+
+  if (performance) {
+    webpackConfig.performance = performance;
+  }
+
+  const compiler = webpack(webpackConfig);
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   compiler.outputFileSystem = createFsFromVolume(volume);
+
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   compiler.inputFileSystem = createFsFromVolume(volume);
