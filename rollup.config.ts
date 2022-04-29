@@ -1,7 +1,9 @@
 // eslint-disable-next-line filenames/match-regex
 import typescript from '@rollup/plugin-typescript';
 import { getBabelOutputPlugin } from '@rollup/plugin-babel';
+import dts from 'rollup-plugin-dts';
 import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 
 interface BrowserOptions {
@@ -65,44 +67,39 @@ export default [
     output: './client.legacy.js',
     useBabel: true,
   }),
-  // {
-  //   input: "./src/client/index.ts",
-  //   plugins: [
-  //     resolve({
-  //       browser: true,
-  //     }),
-  //     // check ts
-  //     typescript({
-  //       compilerOptions: {
-  //         noEmitOnError: true,
-  //       },
-  //       include: ["src/client/**/*", "**/*.ts"],
-  //     }),
-  //     getBabelOutputPlugin({
-  //       presets: [
-  //         [
-  //           "@babel/preset-env",
-  //           {
-  //             targets: {
-  //               browsers: "ie >= 11",
-  //             },
-  //           },
-  //         ],
-  //       ],
-  //     }),
-  //     terser({
-  //       output: {
-  //         comments: false,
-  //       },
-  //       mangle: true,
-  //       compress: true,
-  //     }),
-  //   ],
-  //   output: [
-  //     {
-  //       format: "cjs",
-  //       file: "build/client/index.js",
-  //     },
-  //   ],
-  // },
+  {
+    input: './src/server/index.ts',
+    output: [{ file: 'dist/index.d.ts' }],
+    plugins: [dts()],
+  },
+  {
+    input: './src/server/index.ts',
+    plugins: [
+      commonjs({
+        exclude: 'node_modules',
+        ignoreGlobal: true,
+      }),
+      // check ts
+      typescript({
+        compilerOptions: {
+          noEmitOnError: true,
+        },
+        include: ['src/server/**/*', '**/*.ts'],
+      }),
+      // terser({
+      //   output: {
+      //     comments: false,
+      //   },
+      //   mangle: true,
+      //   compress: true,
+      // }),
+    ],
+    output: [
+      {
+        format: 'cjs', // commonJS
+        sourcemap: true,
+        file: 'dist/index.js',
+      },
+    ],
+  },
 ];

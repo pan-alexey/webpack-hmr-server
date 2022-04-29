@@ -1,6 +1,6 @@
 import { Socket } from './components/scoket';
 import moduleReplacement from './components/moduleReplacement';
-import { QUERY_PATH, TIMEOUT } from '../common/constants';
+import { QUERY_PATH, TIMEOUT, GLOBAL_NAME } from '../common/constants';
 
 export const app = async () => {
   const socket = new Socket('ws://' + location.host + `/${QUERY_PATH}`, TIMEOUT);

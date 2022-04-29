@@ -107,5 +107,15 @@ export const hotModuleReplacement = (options: Options) => {
       send(client, 'build', lastStat);
     });
   };
+
+  const sendAction = function (stats: webpack.Stats | null) {
+    lastStat = stats;
+
+    // broadcast messages
+    wsServer.clients.forEach((client) => {
+      send(client, 'build', lastStat);
+    });
+  };
+
   return sendStats;
 };
