@@ -33,10 +33,10 @@ const STATS_CONFIG = {
   warnings: true,
 };
 
-export const hotModuleReplacement = (options: Options) => {
+export const WebSocketServer = (options: Options) => {
   let lastStat: webpack.Stats | null = null;
-  const wsServer = new WebSocket.Server({ noServer: true });
 
+  const wsServer = new WebSocket.Server({ noServer: true });
   options.server.on('upgrade', (request, socket, head) => {
     if (!request.url) return;
     const pathname = url.parse(request.url).pathname;
@@ -100,15 +100,6 @@ export const hotModuleReplacement = (options: Options) => {
   });
 
   const sendStats = function (stats: webpack.Stats | null) {
-    lastStat = stats;
-
-    // broadcast messages
-    wsServer.clients.forEach((client) => {
-      send(client, 'build', lastStat);
-    });
-  };
-
-  const sendAction = function (stats: webpack.Stats | null) {
     lastStat = stats;
 
     // broadcast messages

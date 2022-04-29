@@ -30,6 +30,7 @@ const browser = (options: BrowserOptions) => {
           noEmitOnError: true,
         },
         include: ['src/client/**/*', '**/*.ts'],
+        exclude: ['src/**/*.spec.ts', 'src/**/*.mock.ts'],
       }),
       // use Babel options
       options.useBabel &&
@@ -85,14 +86,15 @@ export default [
           noEmitOnError: true,
         },
         include: ['src/server/**/*', '**/*.ts'],
+        exclude: ['src/**/*.spec.ts', 'src/**/*.mock.ts'],
       }),
-      // terser({
-      //   output: {
-      //     comments: false,
-      //   },
-      //   mangle: true,
-      //   compress: true,
-      // }),
+      terser({
+        output: {
+          comments: false,
+        },
+        mangle: true,
+        compress: true,
+      }),
     ],
     output: [
       {
