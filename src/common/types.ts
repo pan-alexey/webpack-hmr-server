@@ -1,7 +1,6 @@
 import webpack from 'webpack';
 
-export type Actions = 'check' | 'build' | 'reload';
-export type Events = '';
+export type Actions = 'init' | 'check' | 'build' | 'reload';
 
 export interface ModuleData {
   name: string;
@@ -9,4 +8,10 @@ export interface ModuleData {
   time?: number;
   warnings: Array<webpack.StatsError>;
   errors: Array<webpack.StatsError>;
+}
+
+export interface Message {
+  action: Actions;
+  info?: string;
+  data: ModuleData | null;
 }

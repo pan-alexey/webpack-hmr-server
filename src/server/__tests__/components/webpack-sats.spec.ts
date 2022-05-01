@@ -1,9 +1,24 @@
 /* eslint-disable filenames/match-regex */
 import webpack from 'webpack';
-import webpackFixture from './__mocks__/webpack.fixture';
-import { memoStats, normlizeStatsError, convertStatsToModuleData } from '../webpack-sats';
+import webpackFixture from 'webpack-fixture';
 
-describe('WebpackStats', () => {
+import { memoStats, normlizeStatsError, convertStatsToModuleData } from '../../components/webpack-sats';
+
+const webpackConfig: webpack.Configuration = {
+  entry: '/index.js',
+  mode: 'production',
+  output: {
+    filename: 'bundle.js',
+    path: '/build',
+  },
+  performance: {
+    hints: 'warning',
+    maxEntrypointSize: 20,
+    maxAssetSize: 20,
+  },
+};
+
+describe('server/WebpackStats', () => {
   it('memoStats', async () => {
     const processStats = memoStats();
     // first call
@@ -60,11 +75,7 @@ describe('WebpackStats', () => {
     expect(convertStatsToModuleData(notValidStats)).toBeNull();
 
     // webpack compile to memfs
-    const { compiler, fs } = webpackFixture('/index.js', 'production', {
-      hints: 'warning',
-      maxEntrypointSize: 20,
-      maxAssetSize: 20,
-    });
+    const { compiler, fs } = webpackFixture(webpackConfig);
 
     // Success compile
     fs.writeFileSync('/index.js', `const text='test'; console.log(text)`);
@@ -73,10 +84,11 @@ describe('WebpackStats', () => {
         resolve(stats);
       });
     });
+
     const moduleDataOk = convertStatsToModuleData(compileOk as webpack.Stats);
     expect(moduleDataOk).toStrictEqual({
       name: expect.any(String),
-      hash: expect.any(String),
+      hash: (compileOk as webpack.Stats).hash,
       time: expect.any(Number),
       warnings: expect.any(Array),
       errors: expect.any(Array),
@@ -101,7 +113,7 @@ describe('WebpackStats', () => {
     const moduleDataWarning = convertStatsToModuleData(compileWarning as webpack.Stats);
     expect(moduleDataWarning).toStrictEqual({
       name: expect.any(String),
-      hash: expect.any(String),
+      hash: (compileWarning as webpack.Stats).hash,
       time: expect.any(Number),
       warnings: expect.any(Array),
       errors: expect.any(Array),
@@ -122,7 +134,7 @@ describe('WebpackStats', () => {
     const moduleDataError = convertStatsToModuleData(compileError as webpack.Stats);
     expect(moduleDataError).toStrictEqual({
       name: expect.any(String),
-      hash: expect.any(String),
+      hash: (compileError as webpack.Stats).hash,
       time: expect.any(Number),
       warnings: expect.any(Array),
       errors: expect.any(Array),

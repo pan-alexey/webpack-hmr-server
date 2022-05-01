@@ -1,23 +1,16 @@
 import webpack from 'webpack';
 import * as http from 'http';
+import { WEBPACK_PLUGIN_NAME } from '../common/constants';
+import { HotModuleServer } from './components/hot-module-service';
 
-import { SocketServer } from './components/socket-server';
+export const manual = (serve: http.Server) => {
+  return new HotModuleServer(serve);
+};
 
-export { SocketServer };
-// import { webSocketServer } from './socket';
-// import { WEBPACK_PLUGIN_NAME, QUERY_PATH } from '../common/constants';
+export default (compiler: webpack.Compiler, serve: http.Server) => {
+  const hotModuleServer = new HotModuleServer(serve);
 
-// export { webSocketServer };
-
-// export const webpackHmrServer = (compiler: webpack.Compiler, server: http.Server) => {
-//   const sendHmr = webSocketServer({
-//     server: server,
-//     path: `/${QUERY_PATH}`,
-//   });
-//   compiler.hooks.done.tap(WEBPACK_PLUGIN_NAME, (stats: webpack.Stats) => {
-//     sendHmr(stats);
-//   });
-// };
-
-// export default webpackHmrServer;
-// module.exports = webpackHmrServer;
+  compiler.hooks.done.tap(WEBPACK_PLUGIN_NAME, (stats: webpack.Stats) => {
+    hotModuleServer.processStats(stats);
+  });
+};

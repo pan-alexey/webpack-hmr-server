@@ -1,39 +1,18 @@
 /* eslint-disable filenames/match-regex */
 import * as http from 'http';
-import * as net from 'net';
 import WebSocket from 'ws';
+import { waitForSocketState, startHttpServer } from '../__mocks__/fixtures';
 
-import { SocketServer } from '../socket-server';
+import { SocketServer } from '../../components/socket-server';
 
-function startServer(): Promise<http.Server> {
-  const server = http.createServer();
-  return new Promise((resolve) => {
-    server.listen(() => resolve(server));
-  });
-}
-
-function waitForSocketState(
-  socketClient: WebSocket.WebSocket,
-  status: typeof WebSocket.OPEN | typeof WebSocket.CLOSED,
-) {
-  return new Promise(function (resolve) {
-    setTimeout(function () {
-      if (socketClient.readyState === status) {
-        resolve(true);
-      } else {
-        waitForSocketState(socketClient, status).then(resolve);
-      }
-    }, 10);
-  });
-}
-
-describe('WebSocketServer', () => {
+describe('server/WebSocketServer', () => {
   let httpServer: http.Server;
   let httpServerPrort: number;
 
   beforeAll(async () => {
-    httpServer = await startServer();
-    httpServerPrort = (httpServer.address() as net.AddressInfo).port;
+    const { server, port } = await startHttpServer();
+    httpServer = server;
+    httpServerPrort = port;
   });
 
   afterAll(() => {
@@ -41,16 +20,12 @@ describe('WebSocketServer', () => {
   });
 
   it('root path', async () => {
-    const socketServer = new SocketServer({ server: httpServer });
-    // const socketClient1 = new WebSocket(`ws://localhost:${httpServerPrort}/`);
-    const socketClient2 = new WebSocket(`ws://localhost:${httpServerPrort}`);
-    // await waitForSocketState(socketClient1, WebSocket.OPEN);
-    await waitForSocketState(socketClient2, WebSocket.OPEN);
+    new SocketServer({ server: httpServer });
+    const socketClient = new WebSocket(`ws://localhost:${httpServerPrort}`);
+    await waitForSocketState(socketClient, WebSocket.OPEN);
 
-    // socketClient1.close();
-    socketClient2.close();
-    // await waitForSocketState(socketClient1, WebSocket.CLOSED);
-    await waitForSocketState(socketClient2, WebSocket.CLOSED);
+    socketClient.close();
+    await waitForSocketState(socketClient, WebSocket.CLOSED);
   });
 
   it('broadcast', async () => {

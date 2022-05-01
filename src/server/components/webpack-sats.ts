@@ -1,6 +1,6 @@
 /* eslint-disable filenames/match-regex */
 import webpack from 'webpack';
-import stripAnsi from 'strip-ansi';
+import stripAnsi from '../utils/strip-ansi';
 import { ModuleData } from '../../common/types';
 
 export const STATS_CONFIG = {
