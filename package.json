@@ -29,6 +29,7 @@
     "@veva/eslint-config": "^1.0.3",
     "@veva/prettier-config": "^1.0.3",
     "jest": "^27.1.4",
+    "jest-environment-jsdom": "^28.0.2",
     "memfs": "^3.4.1",
     "rollup": "^2.52.2",
     "rollup-plugin-dts": "^4.2.1",
@@ -61,6 +62,7 @@
     "middleware"
   ],
   "dependencies": {
+    "@testing-library/jest-dom": "^5.16.4",
     "ws": "^8.5.0"
   }
 }
