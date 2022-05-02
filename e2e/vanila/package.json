@@ -1,0 +1,14 @@
+{
+  "name": "@webpack-hmr-server/e2e-vanilla",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo e2e test"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "puppeteer": "^13.7.0",
+    "webpack": "^5.65.0",
+    "webpack-hmr-server": "^1.0.0"
+  }
+}

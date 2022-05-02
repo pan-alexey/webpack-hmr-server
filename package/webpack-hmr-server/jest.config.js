@@ -1,7 +1,7 @@
 /* eslint-disable filenames/match-regex */
 module.exports = {
   preset: 'ts-jest/presets/default-esm',
-  roots: ['<rootDir>/src/client'],
+  roots: ['<rootDir>/src'],
   testEnvironment: 'node',
   transform: {
     '^.+\\.(js|jsx)?$': 'babel-jest',

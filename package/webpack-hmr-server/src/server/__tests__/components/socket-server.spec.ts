@@ -15,8 +15,6 @@ describe('server/WebSocketServer', () => {
 
   beforeAll(async () => {
     httpServer = await startHttpServer();
-    // httpServer = server;
-    // httpServerPrort = port;
   });
 
   afterAll(() => {
@@ -40,10 +38,10 @@ describe('server/WebSocketServer', () => {
     const path = '__ws_test_broadcast__';
     const sentMessage = Math.random().toString(36).substring(7);
 
-    const socketServer = new SocketServer({ server: httpServer, path });
-    const socketClient1 = new WebSocket(`ws://localhost:${httpServerPrort}/${path}`);
-    const socketClient2 = new WebSocket(`ws://localhost:${httpServerPrort}/${path}`);
-    const socketClient3 = new WebSocket(`ws://localhost:${httpServerPrort}/${path}`);
+    const socketServer = new SocketServer({ server: httpServer.server, path });
+    const socketClient1 = new WebSocket(`ws://localhost:${httpServer.port}/${path}`);
+    const socketClient2 = new WebSocket(`ws://localhost:${httpServer.port}/${path}`);
+    const socketClient3 = new WebSocket(`ws://localhost:${httpServer.port}/${path}`);
     await waitForSocketState(socketClient1, WebSocket.OPEN);
     await waitForSocketState(socketClient2, WebSocket.OPEN);
     await waitForSocketState(socketClient3, WebSocket.OPEN);
@@ -86,10 +84,10 @@ describe('server/WebSocketServer', () => {
 
     const path = '__ws_test_onMessage__';
 
-    const socketServer = new SocketServer({ server: httpServer, path });
-    const socketClient1 = new WebSocket(`ws://localhost:${httpServerPrort}/${path}`);
-    const socketClient2 = new WebSocket(`ws://localhost:${httpServerPrort}/${path}`);
-    const socketClient3 = new WebSocket(`ws://localhost:${httpServerPrort}/${path}`);
+    const socketServer = new SocketServer({ server: httpServer.server, path });
+    const socketClient1 = new WebSocket(`ws://localhost:${httpServer.port}/${path}`);
+    const socketClient2 = new WebSocket(`ws://localhost:${httpServer.port}/${path}`);
+    const socketClient3 = new WebSocket(`ws://localhost:${httpServer.port}/${path}`);
     await waitForSocketState(socketClient1, WebSocket.OPEN);
     await waitForSocketState(socketClient2, WebSocket.OPEN);
     await waitForSocketState(socketClient3, WebSocket.OPEN);

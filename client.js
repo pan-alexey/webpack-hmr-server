@@ -1,1 +1,0 @@
-"use strict";const t=new class{dispatch(){const t=new CustomEvent("_test_",{cancelable:!0,bubbles:!0,detail:{name:"Вася"}});document.dispatchEvent(t)}};setInterval((()=>{t.dispatch()}),5e3);setInterval((()=>{t.dispatch()}),5e3);

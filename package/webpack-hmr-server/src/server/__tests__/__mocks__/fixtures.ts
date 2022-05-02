@@ -17,10 +17,14 @@ export function waitForSocketState(
   });
 }
 
-export const createHttpServer = (): Promise<http.Server> => {
+export const createHttpServer = (port?: number): Promise<http.Server> => {
   const server = http.createServer();
   return new Promise((resolve) => {
-    server.listen(() => resolve(server));
+    if (port) {
+      server.listen(port, () => resolve(server));
+    } else {
+      server.listen(() => resolve(server));
+    }
   });
 };
 
