@@ -21,6 +21,30 @@ The user has the right to decide on his own what will be the overlay or message 
 npm install -D webpack-hmr-server
 ```
 
+## Example usage
+
+
+```ts
+import webpackHmrServer from "webpack-hmr-server";
+const webpackConfig: webpack.Configuration = {
+  entry: [
+    path.resolve(__PATH__, "./index.js"),
+    "webpack-hmr-server/client.js", // Important to add to every entries
+    // "webpack-hmr-server/client.legacy.js", // for legacy browsers
+  ],
+  mode: "development",
+  output: {
+    filename: "index.js",
+    path: path.resolve(__PATH__, "./build"),
+  },
+  plugins: [new webpack.HotModuleReplacementPlugin()],
+};
+
+const server = http.createServer();
+webpackHmrServer(compiler, server); //  auto subscribes to compiler hooks and sends service message
+const compiler = webpack(webpackConfig);
+server.listen(port, callback)
+```
 - - -
 
 ## How it Works
@@ -38,9 +62,6 @@ Communication between the server and the client occurs through a websocket.
 
 ![Client flow schema](https://github.com/pan-alexey/webpack-hmr-server/blob/main/static/flow-client.jpg?raw=true)
 
-
-- - -
-
 ## How does the HMR runtime determine that there is an update?
 
 If you run webpack in watch and HMR mode, then for each update of the source files, in addition to rebuilding the bundle, an update manifest will be created and one js file for each updated chunk. These js files will only contain updated modules.
@@ -50,7 +71,7 @@ The update manifest is a json file containing the new compilation hash and a lis
 
 if module.hot.check(true) is called in a running application, then a request for JSON will be sent. If successful, modules will be updated
 
-
+- - -
 ## Module Server 
 ![language](https://img.shields.io/badge/language-typescript-blue)
 ![coverage-server](https://img.shields.io/badge/coverage-95.45%25-green)

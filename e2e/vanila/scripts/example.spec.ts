@@ -14,7 +14,7 @@ describe("e2e/vanilla", () => {
   let files: Record<string, string>;
   beforeAll(async () => {
     browser = await puppeteer.launch({
-      headless: false,
+      // headless: false,
     });
   });
 
@@ -59,7 +59,6 @@ describe("e2e/vanilla", () => {
     // wait build
     await new Promise((reolve) => setTimeout(reolve, 1_000));
     const page = await browser.newPage();
-    console.log(`http://127.0.0.1:${httpServer.port}/index.html`);
     await page.goto(`http://127.0.0.1:${httpServer.port}/index.html`);
     await new Promise((reolve) => setTimeout(reolve, 5_000)); // recomendet delay
 
