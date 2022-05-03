@@ -33,6 +33,11 @@ When the client receives a message, it will check to see if the local code is up
 
 Communication between the server and the client occurs through a websocket.
 
+- - -
+### Client flow schema
+
+![Client flow schema](https://raw.githubusercontent.com/pan-alexey/webpack-hmr-server/main/assets/flow-client.jpg)
+
 
 - - -
 
