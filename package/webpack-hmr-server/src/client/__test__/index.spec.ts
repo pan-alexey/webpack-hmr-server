@@ -17,12 +17,6 @@ const webpackConfig: webpack.Configuration = {
   },
 };
 
-// const replaceModiles = (moduleData: ModuleData, serverAction: ServerActions) => {};
-// const sendEvent = (event: Events) => {
-//   expect(event).toEqual({ message: 'Server message error', moduleData: null });
-//   console.log(event);
-// };
-
 describe('HotModuleClient', () => {
   it('Server message error', async () => {
     const fnSendEvent = jest.fn();
