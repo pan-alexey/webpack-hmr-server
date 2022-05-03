@@ -3,6 +3,21 @@ Webpack hot reloading using http server and websocket
 
 ![npm](https://img.shields.io/npm/v/webpack-hmr-server)
 ![npm](https://img.shields.io/npm/dm/webpack-hmr-server)
+![licence](https://img.shields.io/badge/licence-MIT-green)
+
+Alternative to [webpack-hot-middleware](https://www.npmjs.com/package/webpack-hot-middleware). This allows you to add hot reloading into an existing server without webpack-dev-server.
+
+This package gives you the ability to check for module changes within your application and execute those changes using webpack's HMR API. 
+Actually making your application capable of using hot reloading to make seamless changes is out of scope, and usually handled by another library.
+Unlike [webpack-hot-middleware](https://www.npmjs.com/package/webpack-hot-middleware), the package will not generate an event if the build fails. Instead, it will send a message to the client
+
+The user has the right to decide on his own what will be the overlay or message in the browser console. This will allow you to control your preference for build errors or informational messages.
+
+## Install
+
+```sh
+npm install -D webpack-hmr-server
+```
 
 ## Module Server 
 ![language](https://img.shields.io/badge/language-typescript-blue)
