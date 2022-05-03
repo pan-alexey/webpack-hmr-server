@@ -23,7 +23,7 @@ Webpack hot reloading using http server and websocket
 
 | Component | Tags | Description |
 | - | - | - |
-| socket-client | ![coverage-socket-client](https://img.shields.io/badge/coverage-100%%25-green) | Custom web socket client with recconect |
+| socket-client | ![coverage-socket-client](https://img.shields.io/badge/coverage-100%25-green) | Custom web socket client with recconect |
 | client| ![coverage-client](https://img.shields.io/badge/coverage-~69.65%25-yellow) | client application |
 | utils | ![coverage-client-utils](https://img.shields.io/badge/coverage-100%25-green) | Helpers for client application |
 | module-replacement | ![coverage-module-replacement](https://img.shields.io/badge/coverage-26.19%25-red) | There is no way to cover the test. e2e testing only |
