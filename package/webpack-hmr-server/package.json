@@ -1,6 +1,6 @@
 {
   "name": "webpack-hmr-server",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Webpack hot reloading using http server and websocket",
   "main": "dist/index.js",
   "files": [
