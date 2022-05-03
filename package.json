@@ -15,6 +15,7 @@
   "scripts": {
     "bootstrap": "yarn install",
     "install": "yarn build",
+    "dev": "yarn build && yarn workspace @webpack-hmr-server/e2e-vanilla test",
     "test": "yarn workspace webpack-hmr-server test",
     "build": "yarn workspace webpack-hmr-server build",
     "clear": "rimraf ./**/package-lock.json && rimraf ./**/yarn.lock && rimraf ./**/node_modules"

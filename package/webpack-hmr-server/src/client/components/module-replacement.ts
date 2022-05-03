@@ -13,9 +13,9 @@ export class UserException {
   }
 }
 
-export const webpackHashCheck = () => {
+export const webpackHashCheck = function () {
   let lastHash: string = __webpack_hash__;
-  return (hash?: string): boolean => {
+  return function (hash?: string): boolean {
     lastHash = hash ? hash : lastHash;
     return lastHash === __webpack_hash__;
   };
@@ -29,7 +29,6 @@ export interface ModuleReplacementOptions {
 // ModuleReplacement covered by e2e testing
 export class ModuleReplacement {
   private webpackHashCheck = webpackHashCheck();
-
   private sendEvent: (data: Events) => void;
   private pageReload: () => void;
 
@@ -39,7 +38,7 @@ export class ModuleReplacement {
   }
 
   // Hot Reload (Main method)
-  private async moduleHotCheck(): Promise<Modules> {
+  private moduleHotCheck = async (): Promise<Modules> => {
     // https://github.com/DefinitelyTyped/DefinitelyTyped/pull/60088
     // eslint-disable-next-line
     // @ts-ignore
@@ -57,9 +56,9 @@ export class ModuleReplacement {
       updatedModules = [...updatedModules, ...modules];
     }
     return unique(updatedModules);
-  }
+  };
 
-  private async check(moduleData: ModuleData, serverAction: ServerActions): Promise<void> {
+  private check = async (moduleData: ModuleData, serverAction: ServerActions): Promise<void> => {
     try {
       const updatedModules = await this.moduleHotCheck();
       this.sendEvent({
@@ -97,9 +96,9 @@ export class ModuleReplacement {
         });
       }
     }
-  }
+  };
 
-  public emit(moduleData: ModuleData, serverAction: ServerActions): void {
+  public emit = (moduleData: ModuleData, serverAction: ServerActions): void => {
     if (!module.hot) {
       this.sendEvent({
         message: 'Hot Module Replacement is disabled. Page will be full reload',
@@ -120,5 +119,5 @@ export class ModuleReplacement {
     }
 
     this.check(moduleData, serverAction);
-  }
+  };
 }

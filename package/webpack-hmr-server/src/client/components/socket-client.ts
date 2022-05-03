@@ -15,14 +15,6 @@ export class SocketClient {
   private reConnectCallbacks: Array<(client: WebSocket) => void> = [];
   private messageCallbacks: Array<(message: string) => void> = [];
   private closeCallbacks: Array<() => void> = [];
-  // private callbacks: {
-  //   [name in EventTypes]: Array<EventCallback>;
-  // } = {
-  //   open: [],
-  //   close: [],
-  //   reconected: [],
-  //   message: [],
-  // };
 
   constructor(url: string, timeout: number) {
     this.url = url;

@@ -36,10 +36,19 @@ Communication between the server and the client occurs through a websocket.
 - - -
 ### Client flow schema
 
-![Client flow schema](https://raw.githubusercontent.com/pan-alexey/webpack-hmr-server/main/assets/flow-client.jpg)
+![Client flow schema](https://github.com/pan-alexey/webpack-hmr-server/blob/main/static/flow-client.jpg?raw=true)
 
 
 - - -
+
+## How does the HMR runtime determine that there is an update?
+
+If you run webpack in watch and HMR mode, then for each update of the source files, in addition to rebuilding the bundle, an update manifest will be created and one js file for each updated chunk. These js files will only contain updated modules.
+
+
+The update manifest is a json file containing the new compilation hash and a list of updated files. The compilation hash is generated during the bundle build and passed to the HMR runtime.
+
+if module.hot.check(true) is called in a running application, then a request for JSON will be sent. If successful, modules will be updated
 
 
 ## Module Server 

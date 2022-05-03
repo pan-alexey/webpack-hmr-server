@@ -7,7 +7,7 @@ module.exports = {
     "^.+\\.(js|jsx)?$": "babel-jest",
     "^.+\\.(t|j)sx?$": "ts-jest",
   },
-  testTimeout: 60_000,
+  testTimeout: 120_000,
   transformIgnorePatterns: ["<rootDir>/node_modules/"],
   moduleDirectories: ["node_modules"],
   testRegex: "(/.*|(\\.|/)(spec))\\.(jsx?|tsx?)$",
