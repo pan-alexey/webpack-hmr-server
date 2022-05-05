@@ -1,0 +1,34 @@
+{
+  "name": "@webpack-hmr-server/e2e-react-ts",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "jest --config jest.config.js"
+  },
+  "dependencies": {
+    "@babel/core": "^7.17.5",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "7.16.7",
+    "@babel/preset-typescript": "^7.16.7",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.4",
+    "@types/express": "^4.17.13",
+    "@types/fs-extra": "^9.0.13",
+    "@types/jest": "^27.4.1",
+    "@types/node": "^17.0.1",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@types/webpack-env": "^1.16.3",
+    "babel-loader": "^8.2.3",
+    "fs-extra": "^10.1.0",
+    "jest": "^27.1.4",
+    "puppeteer": "^13.7.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-refresh": "^0.11.0",
+    "ts-jest": "^27.0.3",
+    "ts-loader": "^9.2.7",
+    "typescript": "^4.6.2",
+    "webpack": "^5.65.0",
+    "webpack-hmr-server": "^1.0.0"
+  }
+}
