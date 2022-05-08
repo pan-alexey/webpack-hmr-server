@@ -5,6 +5,10 @@ Webpack hot reloading using http server and websocket
 ![npm](https://img.shields.io/npm/dm/webpack-hmr-server)
 ![licence](https://img.shields.io/badge/licence-MIT-green)
 
+![test](https://img.shields.io/badge/React-done-green)
+![test](https://img.shields.io/badge/VanillaJS-done-green)
+![test](https://img.shields.io/badge/VUE-wait-red)
+
 Alternative to [webpack-hot-middleware](https://www.npmjs.com/package/webpack-hot-middleware). This allows you to add hot reloading into an existing server without webpack-dev-server. This package will be useful if you don't use middleware, or use your own server implementation
 
 This package gives you the ability to check for module changes within your application and execute those changes using webpack's HMR API. 
