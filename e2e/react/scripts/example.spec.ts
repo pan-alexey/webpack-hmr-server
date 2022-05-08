@@ -15,7 +15,7 @@ describe("e2e/react", () => {
   let files: Record<string, string>;
   beforeAll(async () => {
     browser = await puppeteer.launch({
-      headless: false,
+      // headless: false,
       devtools: true,
     });
   });
@@ -144,7 +144,7 @@ describe("e2e/react", () => {
       `
     );
     await new Promise((reolve) => setTimeout(reolve, 5_000)); // wait reload
-    await new Promise((reolve) => setTimeout(reolve, 50_000)); // wait reload
+    await new Promise((reolve) => setTimeout(reolve, 5_000)); // wait reload
 
     // if #element-2 === "puppeteer" then the page was not full reloaded
     element1 = await page.$eval(
@@ -156,10 +156,10 @@ describe("e2e/react", () => {
       (element) => element.textContent || ""
     );
 
-    expect(element1).toBe("Hi, world Text 1");
+    expect(element1).toBe("Hello, world Text 2");
     expect(element2).toBe("");
     // // *****************************************************
-    await new Promise((reolve) => setTimeout(reolve, 30_000)); // wait reload
+    await new Promise((reolve) => setTimeout(reolve, 5_000)); // wait reload
     await page.close();
     await new Promise((resolve) => compiler.close(resolve));
     httpServer.close();
@@ -314,7 +314,7 @@ describe("e2e/react", () => {
     expect(element1).toBe("Hi, world Text 1");
     expect(element2).toBe("");
     // // *****************************************************
-    await new Promise((reolve) => setTimeout(reolve, 30_000)); // wait reload
+    await new Promise((reolve) => setTimeout(reolve, 5_000)); // wait reload
     await page.close();
     await new Promise((resolve) => compiler.close(resolve));
     httpServer.close();
@@ -455,7 +455,7 @@ describe("e2e/react", () => {
     expect(element1).toBe("Hello, world Text 2");
     expect(element2).toBe("puppeteer");
     // // *****************************************************
-    await new Promise((reolve) => setTimeout(reolve, 30_000)); // wait reload
+    await new Promise((reolve) => setTimeout(reolve, 5_000)); // wait reload
     await page.close();
     await new Promise((resolve) => compiler.close(resolve));
     httpServer.close();
@@ -597,7 +597,7 @@ describe("e2e/react", () => {
     expect(element1).toBe("Hello, world Text 1");
     expect(element2).toBe("puppeteer");
     // // *****************************************************
-    await new Promise((reolve) => setTimeout(reolve, 30_000)); // wait reload
+    await new Promise((reolve) => setTimeout(reolve, 5_000)); // wait reload
     await page.close();
     await new Promise((resolve) => compiler.close(resolve));
     httpServer.close();
