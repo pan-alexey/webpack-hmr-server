@@ -64,14 +64,7 @@ export class HotModuleClient {
       return;
     }
 
-    if (['init', 'check'].includes(message.action)) {
-      if (module.hot) {
-        this.replaceModiles(moduleData, message.action);
-      }
-      return;
-    }
-
-    if (message.action === 'build') {
+    if (['build', 'init', 'check'].includes(message.action)) {
       this.replaceModiles(moduleData, message.action);
       return;
     }

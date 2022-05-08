@@ -99,6 +99,15 @@ export class ModuleReplacement {
   };
 
   public emit = (moduleData: ModuleData, serverAction: ServerActions): void => {
+    if (this.webpackHashCheck(moduleData.hash)) {
+      this.sendEvent({
+        message: 'Already update',
+        serverAction,
+        moduleData,
+      });
+      return;
+    }
+
     if (!module.hot) {
       this.sendEvent({
         message: 'Hot Module Replacement is disabled. Page will be full reload',
@@ -106,15 +115,6 @@ export class ModuleReplacement {
         moduleData,
       });
       this.pageReload();
-      return;
-    }
-
-    if (this.webpackHashCheck(moduleData.hash)) {
-      this.sendEvent({
-        message: 'Already update',
-        serverAction,
-        moduleData,
-      });
       return;
     }
 
