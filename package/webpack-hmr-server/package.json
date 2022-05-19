@@ -1,6 +1,6 @@
 {
   "name": "webpack-hmr-server",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Webpack hot reloading using http server and websocket",
   "main": "dist/index.js",
   "files": [
@@ -23,7 +23,7 @@
     "@rollup/plugin-typescript": "^8.3.2",
     "@types/jest": "^27.4.1",
     "@types/node": "^17.0.1",
-    "@types/webpack-env": "^1.16.3",
+    "@types/webpack-env": "^1.17.0",
     "@types/ws": "^8.5.3",
     "@veva/eslint-config": "^1.0.3",
     "@veva/prettier-config": "^1.0.3",

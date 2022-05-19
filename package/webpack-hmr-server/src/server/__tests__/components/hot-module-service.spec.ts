@@ -1,5 +1,4 @@
 /* eslint-disable filenames/match-regex */
-import * as http from 'http';
 import webpack from 'webpack';
 import WebSocket from 'ws';
 import webpackFixture from 'webpack-fixture';

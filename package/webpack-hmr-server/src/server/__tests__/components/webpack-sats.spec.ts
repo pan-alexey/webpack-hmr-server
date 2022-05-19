@@ -2,7 +2,7 @@
 import webpack from 'webpack';
 import webpackFixture from 'webpack-fixture';
 
-import { memoStats, normlizeStatsError, convertStatsToModuleData } from '../../components/webpack-sats';
+import { memoStats, convertStatsToModuleData } from '../../components/webpack-sats';
 
 const webpackConfig: webpack.Configuration = {
   entry: '/index.js',
@@ -32,39 +32,6 @@ describe('server/WebpackStats', () => {
 
     expect(processStats(null)).not.toBe(mockWebpackStats1);
     expect(processStats()).toBeNull();
-  });
-
-  it('normlizeStatsError', async () => {
-    const ansiMessage = '\u001B[4mUnicorn\u001B[0m';
-
-    expect(normlizeStatsError()).toEqual([]);
-
-    const error1 = {
-      key: 'key',
-      data: 'test',
-      message: ansiMessage,
-    } as unknown as webpack.StatsError;
-
-    const error2 = {
-      key: 'key',
-      data: 'test',
-      message: 'Unicorn',
-    } as unknown as webpack.StatsError;
-
-    expect(normlizeStatsError()).toEqual([]);
-
-    expect(normlizeStatsError([error1, error2])).toEqual([
-      {
-        key: 'key',
-        data: 'test',
-        message: 'Unicorn',
-      },
-      {
-        key: 'key',
-        data: 'test',
-        message: 'Unicorn',
-      },
-    ]);
   });
 
   it('convertStatsToModuleData', async () => {

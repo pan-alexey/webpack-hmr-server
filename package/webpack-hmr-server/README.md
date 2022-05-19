@@ -80,7 +80,7 @@ if module.hot.check(true) is called in a running application, then a request for
 ## Module Server 
 ![language](https://img.shields.io/badge/language-typescript-blue)
 ![coverage-server](https://img.shields.io/badge/coverage-95.45%25-green)
-![e2e](https://img.shields.io/badge/e2e-waiting-red)
+![e2e](https://img.shields.io/badge/e2e-done-green)
 
 | Component | Tags | Description |
 | - | - | - |
@@ -92,14 +92,14 @@ if module.hot.check(true) is called in a running application, then a request for
 ## Module Client
 ![language](https://img.shields.io/badge/language-typescript-blue)
 ![coverage](https://img.shields.io/badge/coverage-67.78%25-yellow)
-![e2e](https://img.shields.io/badge/e2e-waiting-red)
+![e2e](https://img.shields.io/badge/e2e-done-green)
 
 | Component | Tags | Description |
 | - | - | - |
 | socket-client | ![coverage-socket-client](https://img.shields.io/badge/coverage-100%25-green) | Custom web socket client with recconect |
 | client| ![coverage-client](https://img.shields.io/badge/coverage-~69.65%25-yellow) | client application |
 | utils | ![coverage-client-utils](https://img.shields.io/badge/coverage-100%25-green) | Helpers for client application |
-| module-replacement | ![coverage-module-replacement](https://img.shields.io/badge/coverage-26.19%25-red) | There is no way to cover the test. e2e testing only |
+| module-replacement | ![coverage-module-replacement](https://img.shields.io/badge/coverage-23.91%25-red) | There is no way to cover the test. e2e testing only |
 
 - - -
 

@@ -8,7 +8,11 @@
     "target": "ESNext",
     "strict": true,
     "removeComments": true,
-    "types": ["node", "webpack-env", "jest"],
+    "types": [
+      "node",
+      "webpack-env",
+      "jest"
+    ],
   },
   "exclude": [
     "node_modules",

@@ -1,6 +1,5 @@
 /* eslint-disable filenames/match-regex */
 import webpack from 'webpack';
-import stripAnsi from '../utils/strip-ansi';
 import { ModuleData } from '../../common/types';
 
 export const STATS_CONFIG = {
@@ -14,13 +13,6 @@ export const STATS_CONFIG = {
   warnings: true,
 };
 
-export const normlizeStatsError = (statsError?: Array<webpack.StatsError>): Array<webpack.StatsError> => {
-  return (statsError || []).map((item) => {
-    item.message = stripAnsi(item.message);
-    return item;
-  });
-};
-
 export const convertStatsToModuleData = (stats?: webpack.Stats | null | undefined): ModuleData | null => {
   if (!stats) {
     return null;
@@ -32,8 +24,8 @@ export const convertStatsToModuleData = (stats?: webpack.Stats | null | undefine
       name: statsJson.name || stats.compilation.name || '',
       hash: statsJson.hash,
       time: statsJson.time,
-      warnings: normlizeStatsError(statsJson.warnings),
-      errors: normlizeStatsError(statsJson.errors),
+      warnings: statsJson.warnings || [],
+      errors: statsJson.errors || [],
     };
   } catch (error) {
     return null;

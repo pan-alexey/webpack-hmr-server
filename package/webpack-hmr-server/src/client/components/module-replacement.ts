@@ -39,11 +39,7 @@ export class ModuleReplacement {
 
   // Hot Reload (Main method)
   private moduleHotCheck = async (): Promise<Modules> => {
-    // https://github.com/DefinitelyTyped/DefinitelyTyped/pull/60088
-    // eslint-disable-next-line
-    // @ts-ignore
-    let updatedModules = (await module.hot.check(true)) as Modules; // check(true) - auto apply modules
-
+    let updatedModules = module.hot ? await module.hot.check(true) : null;
     if (!updatedModules) {
       throw new UserException({
         message: 'Cannot find update',
@@ -118,6 +114,8 @@ export class ModuleReplacement {
       return;
     }
 
-    this.check(moduleData, serverAction);
+    if (module.hot) {
+      this.check(moduleData, serverAction);
+    }
   };
 }
