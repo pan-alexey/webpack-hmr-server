@@ -31,7 +31,6 @@ describe('server/HotModuleServer', () => {
     expect(
       JSON.parse(
         processMessage('init', {
-          name: 'test',
           errors: [],
           warnings: [],
         }),
@@ -39,7 +38,6 @@ describe('server/HotModuleServer', () => {
     ).toEqual({
       action: 'init',
       data: {
-        name: 'test',
         errors: [],
         warnings: [],
       },
@@ -66,7 +64,6 @@ describe('server/HotModuleServer', () => {
       const message = JSON.parse(data.toString());
       expect(message.action).toBe('build');
       expect(message.data).toStrictEqual({
-        name: expect.any(String),
         hash: (stats as webpack.Stats).hash,
         time: expect.any(Number),
         warnings: expect.any(Array),
@@ -138,7 +135,6 @@ describe('server/HotModuleServer', () => {
       const message = JSON.parse(data.toString());
       expect(message.action).toBe('init');
       expect(message.data).toStrictEqual({
-        name: expect.any(String),
         hash: (stats as webpack.Stats).hash,
         time: expect.any(Number),
         warnings: expect.any(Array),
@@ -152,7 +148,6 @@ describe('server/HotModuleServer', () => {
       const message = JSON.parse(data.toString());
       expect(message.action).toBe('check');
       expect(message.data).toStrictEqual({
-        name: expect.any(String),
         hash: (stats as webpack.Stats).hash,
         time: expect.any(Number),
         warnings: expect.any(Array),

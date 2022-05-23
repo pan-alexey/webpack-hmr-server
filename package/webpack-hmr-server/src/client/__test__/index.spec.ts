@@ -1,21 +1,7 @@
 /* eslint-disable filenames/match-regex */
 import webpack from 'webpack';
 import { HotModuleClient } from '../index';
-import { Events, ModuleData, Message, ServerActions } from '../../common/types';
-
-const webpackConfig: webpack.Configuration = {
-  entry: '/index.js',
-  mode: 'production',
-  output: {
-    filename: 'bundle.js',
-    path: '/build',
-  },
-  performance: {
-    hints: 'warning',
-    maxEntrypointSize: 20,
-    maxAssetSize: 20,
-  },
-};
+import { Events, Message } from '../../common/types';
 
 describe('HotModuleClient', () => {
   it('Server message error', async () => {
@@ -122,7 +108,7 @@ describe('HotModuleClient', () => {
       expect(event).toEqual({
         message: 'Build error',
         serverAction: 'build',
-        moduleData: { name: '', errors: mockError, warnings: [] },
+        moduleData: { errors: mockError, warnings: [] },
       });
     };
 
@@ -135,7 +121,6 @@ describe('HotModuleClient', () => {
     const message: Message = {
       action: 'build',
       data: {
-        name: '',
         errors: mockError,
         warnings: [],
       },
@@ -168,7 +153,6 @@ describe('HotModuleClient', () => {
       JSON.stringify({
         action: 'init',
         data: {
-          name: '',
           errors: [],
           warnings: [],
         },
@@ -179,7 +163,6 @@ describe('HotModuleClient', () => {
       JSON.stringify({
         action: 'check',
         data: {
-          name: '',
           errors: [],
           warnings: [],
         },
@@ -190,7 +173,6 @@ describe('HotModuleClient', () => {
       JSON.stringify({
         action: 'build',
         data: {
-          name: '',
           errors: [],
           warnings: [],
         },

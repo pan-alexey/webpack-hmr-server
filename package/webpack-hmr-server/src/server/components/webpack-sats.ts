@@ -1,6 +1,6 @@
 /* eslint-disable filenames/match-regex */
 import webpack from 'webpack';
-import { ModuleData } from '../../common/types';
+import { ModuleData, StatsError } from '../../common/types';
 
 export const STATS_CONFIG = {
   all: false,
@@ -20,12 +20,12 @@ export const convertStatsToModuleData = (stats?: webpack.Stats | null | undefine
 
   try {
     const statsJson = stats.toJson(STATS_CONFIG);
+    const { warnings = [], errors = [] } = statsJson;
     return {
-      name: statsJson.name || stats.compilation.name || '',
       hash: statsJson.hash,
       time: statsJson.time,
-      warnings: statsJson.warnings || [],
-      errors: statsJson.errors || [],
+      warnings: warnings,
+      errors: errors,
     };
   } catch (error) {
     return null;

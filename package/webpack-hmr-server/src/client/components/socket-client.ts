@@ -1,7 +1,4 @@
 /* eslint-disable filenames/match-regex */
-type EventTypes = 'open' | 'close' | 'reconected' | 'message';
-type EventCallback = (data: null | string | WebSocket) => Promise<void>;
-
 export class SocketClient {
   private wasConnected = false;
   private ws: WebSocket | undefined;

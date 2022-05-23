@@ -6,14 +6,15 @@ export type ServerActions =
   | 'build' // When webpack rebuild
   | 'reload'; // remote pages reload
 
-export enum ClientActions {}
+export interface StatsError extends webpack.StatsError {
+  appName?: string;
+}
 
 export interface ModuleData {
-  name: string;
   hash?: string;
   time?: number;
-  warnings: Array<webpack.StatsError>;
-  errors: Array<webpack.StatsError>;
+  warnings: StatsError[];
+  errors: StatsError[];
 }
 
 export interface Message {
@@ -26,7 +27,6 @@ export type Modules = Array<string | number>;
 export interface Events {
   message: string;
   serverAction?: ServerActions;
-  clinetAction?: ClientActions;
   updatedModules?: Modules;
   stack?: string;
   moduleData: ModuleData | null;
