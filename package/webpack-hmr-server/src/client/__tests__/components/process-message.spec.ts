@@ -10,64 +10,47 @@ beforeEach(() => {
 });
 
 describe('client/process-message', () => {
-  // it('Remote refresh', async () => {
-  //   const processMessage = new ProcessMessage(null);
+  it('Remote refresh', async () => {
+    Object.assign(global, { __webpack_hash__: '1' });
 
-  //   const event = await processMessage.getEvent({
-  //     action: 'refresh',
-  //   });
+    // Fixtures
+    const moduleHot = new ModuleHotFixtures({ nullable: false });
+    const moduleCheck = new ModuleCheck(moduleHot as unknown as __WebpackModuleApi.Hot);
+    const processMessage = new ProcessMessage(moduleCheck);
 
-  //   expect(event).toEqual({
-  //     message: 'Remote refresh',
-  //     refresh: true,
-  //     action: 'refresh',
-  //     modules: [],
-  //   });
-  // });
+    const event = await processMessage.getEvent({
+      action: 'refresh',
+    });
 
-  // it('Remote refresh', async () => {
-  //   const processMessage = new ProcessMessage(null);
+    expect(event).toEqual({
+      message: 'Remote refresh',
+      refresh: true,
+      action: 'refresh',
+      modules: [],
+    });
+  });
 
-  //   const event = await processMessage.getEvent({
-  //     action: 'init',
-  //   });
+  it('Not valid state', async () => {
+    Object.assign(global, { __webpack_hash__: '1' });
 
-  //   expect(event).toEqual({
-  //     message: 'Not valid state',
-  //     refresh: false,
-  //     action: 'init',
-  //     modules: [],
-  //   });
-  // });
+    // Fixtures
+    const moduleHot = new ModuleHotFixtures({ nullable: false });
+    const moduleCheck = new ModuleCheck(moduleHot as unknown as __WebpackModuleApi.Hot);
+    const processMessage = new ProcessMessage(moduleCheck);
 
-  // it('Hot module reload disable', async () => {
-  //   const processMessage = new ProcessMessage(null);
+    const event = await processMessage.getEvent({
+      action: 'init',
+    });
 
-  //   const event = await processMessage.getEvent({
-  //     action: 'init',
-  //     state: {
-  //       client: {
-  //         warnings: [],
-  //         errors: [],
-  //       },
-  //     },
-  //   });
+    expect(event).toEqual({
+      message: 'Not valid state',
+      refresh: false,
+      action: 'init',
+      modules: [],
+    });
+  });
 
-  //   expect(event).toEqual({
-  //     message: 'Hot module reload disable',
-  //     refresh: false,
-  //     action: 'init',
-  //     modules: [],
-  //     state: {
-  //       client: {
-  //         warnings: [],
-  //         errors: [],
-  //       },
-  //     },
-  //   });
-  // });
-
-  it('module.hot:single hash updates', async () => {
+  it('Already update', async () => {
     Object.assign(global, { __webpack_hash__: '1' });
 
     // fixtures
@@ -100,145 +83,163 @@ describe('client/process-message', () => {
     });
   });
 
-  // it('module.hot:single hash updates', async () => {
-  //   Object.assign(global, { __webpack_hash__: '' });
+  it('Build with error', async () => {
+    Object.assign(global, { __webpack_hash__: '1' });
 
-  //   // fixtures
-  //   const moduleHot = new ModuleHotFixtures({
-  //     nullable: false,
-  //   });
+    // fixtures
+    const moduleHot = new ModuleHotFixtures({
+      nullable: false,
+    });
 
-  //   // Hack for testing
-  //   const moduleCheck = new ModuleCheck(moduleHot as unknown as __WebpackModuleApi.Hot);
+    // Hack for testing
+    const moduleCheck = new ModuleCheck(moduleHot as unknown as __WebpackModuleApi.Hot);
 
-  //   const processMessage = new ProcessMessage(moduleCheck);
+    const processMessage = new ProcessMessage(moduleCheck);
 
-  //   const event = await processMessage.getEvent({
-  //     action: 'init',
-  //     state: {
-  //       client: {
-  //         hash: '',
-  //         warnings: [],
-  //         errors: [],
-  //       },
-  //     },
-  //   });
+    const eventClient = await processMessage.getEvent({
+      action: 'init',
+      state: {
+        client: {
+          warnings: [],
+          errors: ['123' as unknown as StatsError],
+        },
+      },
+    });
 
-  //   expect(event).toEqual({
-  //     message: 'Already update',
-  //     refresh: false,
-  //     state: { client: { hash: '', warnings: [], errors: [] } },
-  //     action: 'init',
-  //     modules: [],
-  //   });
-  // });
+    const eventServer = await processMessage.getEvent({
+      action: 'init',
+      state: {
+        client: {
+          warnings: [],
+          errors: [],
+        },
+        server: {
+          warnings: [],
+          errors: ['123' as unknown as StatsError],
+        },
+      },
+    });
 
-  // it('Build with error', async () => {
-  //   Object.assign(global, { __webpack_hash__: 0 });
+    expect(eventClient).toEqual({
+      message: 'Build with error',
+      refresh: false,
+      state: { client: { warnings: [], errors: ['123'] } },
+      action: 'init',
+      modules: [],
+    });
 
-  //   // fixtures
-  //   const moduleHot = new ModuleHotFixtures({
-  //     nullable: false,
-  //     updateWebpackHash: true, // enable auto update __webpack_hash__
-  //   });
+    expect(eventServer).toEqual({
+      message: 'Build with error',
+      refresh: false,
+      state: {
+        client: { warnings: [], errors: [] },
+        server: { warnings: [], errors: ['123'] },
+      },
+      action: 'init',
+      modules: [],
+    });
+  });
 
-  //   // Note
-  //   // Т/к мы запускаем проверку модулей с авто применением,
-  //   // то в этом шаге произходит пересчет __webpack_hash__
-  //   // фикстура инкрементирует значением каждый вызова moduleHot.check
-  //   // Эмулируем случай, что бэкенд передал нам хеш
-  //   const moduleCheck = new ModuleCheck(moduleHot as unknown as __WebpackModuleApi.Hot);
+  it('Modules updated', async () => {
+    Object.assign(global, { __webpack_hash__: 0 });
 
-  //   const processMessage = new ProcessMessage(moduleCheck);
+    // fixtures
+    const moduleHot = new ModuleHotFixtures({
+      nullable: false,
+      updateWebpackHash: true, // enable auto update __webpack_hash__
+    });
 
-  //   const event = await processMessage.getEvent({
-  //     action: 'init',
-  //     state: {
-  //       client: {
-  //         hash: '3', // 3 modules
-  //         warnings: [],
-  //         errors: [],
-  //       },
-  //     },
-  //   });
+    // Note
+    // Т/к мы запускаем проверку модулей с авто применением,
+    // то в этом шаге произходит пересчет __webpack_hash__
+    // фикстура инкрементирует значением каждый вызова moduleHot.check
+    // Эмулируем случай, что бэкенд передал нам хеш
+    const moduleCheck = new ModuleCheck(moduleHot as unknown as __WebpackModuleApi.Hot);
 
-  //   expect(event).toEqual({
-  //     message: 'Modules updated',
-  //     refresh: false,
-  //     state: { client: { hash: '3', warnings: [], errors: [] } },
-  //     action: 'init',
-  //     modules: ['0', '1', '2', '3'],
-  //   });
-  // });
+    const processMessage = new ProcessMessage(moduleCheck);
 
-  // it('Modules updated', async () => {
-  //   Object.assign(global, { __webpack_hash__: 0 });
+    const event = await processMessage.getEvent({
+      action: 'init',
+      state: {
+        client: {
+          hash: '3', // 3 modules
+          warnings: [],
+          errors: [],
+        },
+      },
+    });
 
-  //   // fixtures
-  //   const moduleHot = new ModuleHotFixtures({
-  //     nullable: false,
-  //     updateWebpackHash: true, // enable auto update __webpack_hash__
-  //   });
+    expect(event).toEqual({
+      message: 'Modules updated',
+      refresh: false,
+      state: { client: { hash: '3', warnings: [], errors: [] } },
+      action: 'init',
+      modules: ['0', '1', '2', '3'],
+    });
+  });
 
-  //   // Note
-  //   // Т/к мы запускаем проверку модулей с авто применением,
-  //   // то в этом шаге произходит пересчет __webpack_hash__
-  //   // фикстура инкрементирует значением каждый вызова moduleHot.check
-  //   // Эмулируем случай, что бэкенд передал нам хеш
-  //   const moduleCheck = new ModuleCheck(moduleHot as unknown as __WebpackModuleApi.Hot);
+  it('Hot module reload disable', async () => {
+    Object.assign(global, { __webpack_hash__: 0 });
 
-  //   const processMessage = new ProcessMessage(moduleCheck);
+    // Note
+    // Т/к мы запускаем проверку модулей с авто применением,
+    // то в этом шаге произходит пересчет __webpack_hash__
+    // фикстура инкрементирует значением каждый вызова moduleHot.check
+    // Эмулируем случай, что бэкенд передал нам хеш
+    const moduleCheck = new ModuleCheck();
 
-  //   const event = await processMessage.getEvent({
-  //     action: 'init',
-  //     state: {
-  //       client: {
-  //         hash: '3', // 3 modules
-  //         warnings: [],
-  //         errors: ['123' as unknown as StatsError],
-  //       },
-  //     },
-  //   });
+    const processMessage = new ProcessMessage(moduleCheck);
 
-  //   expect(event).toEqual({
-  //     message: 'Build with error',
-  //     refresh: false,
-  //     state: { client: { hash: '3', warnings: [], errors: ['123'] } },
-  //     action: 'init',
-  //     modules: [],
-  //   });
-  // });
+    const event = await processMessage.getEvent({
+      action: 'init',
+      state: {
+        client: {
+          hash: '3', // 3 modules
+          warnings: [],
+          errors: [],
+        },
+      },
+    });
 
-  // it('Update failed', async () => {
-  //   Object.assign(global, { __webpack_hash__: '1' });
+    expect(event).toEqual({
+      message: 'Hot module reload disable',
+      refresh: true,
+      state: { client: { hash: '3', warnings: [], errors: [] } },
+      action: 'init',
+      modules: [],
+    });
+  });
 
-  //   // fixtures
-  //   const moduleHot = new ModuleHotFixtures({
-  //     nullable: true,
-  //   });
+  it('module.hot:null', async () => {
+    Object.assign(global, { __webpack_hash__: '' });
 
-  //   // Hack for testing
-  //   const moduleCheck = new ModuleCheck(moduleHot as unknown as __WebpackModuleApi.Hot);
+    // fixtures
+    const moduleHot = new ModuleHotFixtures({
+      nullable: true,
+    });
 
-  //   const processMessage = new ProcessMessage(moduleCheck);
+    // Hack for testing
+    const moduleCheck = new ModuleCheck(moduleHot as unknown as __WebpackModuleApi.Hot);
 
-  //   const event = await processMessage.getEvent({
-  //     action: 'init',
-  //     state: {
-  //       client: {
-  //         hash: '2',
-  //         warnings: [],
-  //         errors: [],
-  //       },
-  //     },
-  //   });
+    const processMessage = new ProcessMessage(moduleCheck);
 
-  //   expect(event).toEqual({
-  //     message: 'Update failed',
-  //     refresh: true,
-  //     state: { client: { hash: '2', warnings: [], errors: [] } },
-  //     action: 'init',
-  //     modules: [],
-  //   });
-  // });
+    const event = await processMessage.getEvent({
+      action: 'init',
+      state: {
+        client: {
+          hash: '3', // 3 modules
+          warnings: [],
+          errors: [],
+        },
+      },
+    });
+
+    expect(event).toEqual({
+      message: 'Update failed',
+      refresh: true,
+      state: { client: { hash: '3', warnings: [], errors: [] } },
+      action: 'init',
+      modules: [],
+    });
+  });
 });

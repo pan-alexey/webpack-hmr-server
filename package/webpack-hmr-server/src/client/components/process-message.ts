@@ -37,7 +37,7 @@ export class ProcessMessage {
     const clinet = remoteMessage.state.client;
 
     // Detect errors
-    const clientErrors = remoteMessage.state.client.errors || [];
+    const clientErrors = remoteMessage.state.client.errors;
     const serverErrors = remoteMessage.state.server?.errors || [];
     if (clientErrors.length > 0 || serverErrors.length > 0) {
       state.message = 'Build with error';

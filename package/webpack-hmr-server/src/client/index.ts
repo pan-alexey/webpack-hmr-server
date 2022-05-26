@@ -8,6 +8,7 @@ export interface Options {
   refresh: () => void;
   sendEvent: (event: Event) => void;
 }
+
 export const app = ({ refresh, sendEvent }: Options) => {
   const moduleCheck = new ModuleCheck(module.hot);
   const processMessage = new ProcessMessage(moduleCheck);

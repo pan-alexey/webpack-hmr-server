@@ -86,8 +86,12 @@ describe('client/hot-replace', () => {
     expect(module).toEqual(['0', '1', '2', '3']);
   });
 
-  // it('module.hot:disable', async () => {
-  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //   expect(createModuleCheck()).toBe(null);
-  // });
+  it('module.hot:disable', async () => {
+    Object.assign(global, { __webpack_hash__: 0 });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const moduleCheck = new ModuleCheck();
+    expect(moduleCheck.hotEnable()).toBe(false);
+    const modules = await moduleCheck.check();
+    expect(modules).toBe(null);
+  });
 });
