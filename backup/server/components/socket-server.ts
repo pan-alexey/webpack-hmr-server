@@ -28,7 +28,6 @@ export class SocketServer {
   private setupWsServer() {
     this.httpServer.on('upgrade', (request, socket, head) => {
       // Dont know how to handle this case
-      /* istanbul ignore next */
       if (!request.url) {
         return;
       }

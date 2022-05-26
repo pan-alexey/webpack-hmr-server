@@ -1,9 +1,9 @@
 /* eslint-disable filenames/match-regex */
 import * as http from 'http';
 import WebSocket from 'ws';
-import { waitForSocketState, startHttpServer } from '../../../common/__mocks__/fixtures';
+import { waitForSocketState, startHttpServer } from '../../../../common/__mocks__/fixtures';
 
-import { SocketServer } from '../../components/socket-server';
+import { SocketServer } from '../../../components/socket-server';
 
 describe('server/socket-server', () => {
   let httpServer: {

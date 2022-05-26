@@ -1,115 +1,39 @@
-import { eventAdapter } from './components/event-adapter';
-import { ModuleReplacement } from './components/module-replacement';
+import { ModuleCheck } from './components/hot-replace';
+import { ProcessMessage } from './components/process-message';
+import { SERVER_PATH_NAME, TIMEOUT } from '../common/constants';
 import { SocketClient } from './components/socket-client';
+import type { Message, Event } from '../common/types';
 
-import { EVENT_NAME, SERVER_PATH_NAME, TIMEOUT } from '../common/constants';
-import { Events, ModuleData, Message, ServerActions } from '../common/types';
-
-export interface HotModuleClientOptions {
-  sendEvent: (event: Events) => void;
-  replaceModiles: (moduleData: ModuleData, serverAction: ServerActions) => void;
-  pageReload: () => void;
+export interface Options {
+  refresh: () => void;
+  sendEvent: (event: Event) => void;
 }
-
-export class HotModuleClient {
-  private sendEvent: (event: Events) => void;
-  private replaceModiles: (moduleData: ModuleData, serverAction: ServerActions) => void;
-  private pageReload: () => void;
-
-  constructor(options: HotModuleClientOptions) {
-    this.sendEvent = options.sendEvent;
-    this.replaceModiles = options.replaceModiles;
-    this.pageReload = options.pageReload;
-  }
-
-  public emit(serverMessage: string) {
-    try {
-      const message = JSON.parse(serverMessage) as Message;
-      this.process(message);
-    } catch (error) {
-      this.sendEvent({
-        message: 'Server message error',
-        moduleData: null,
-      });
-    }
-  }
-
-  private process(message: Message) {
-    if (message.action === 'reload') {
-      this.sendEvent({
-        message: 'Remote reload',
-        serverAction: message.action,
-        moduleData: null,
-      });
-      this.pageReload();
-      return;
-    }
-
-    const moduleData = message.data;
-    if (moduleData === null) {
-      this.sendEvent({
-        message: 'Module data is null',
-        serverAction: message.action,
-        moduleData: null,
-      });
-      return;
-    }
-
-    if (moduleData.errors.length > 0) {
-      this.sendEvent({
-        message: 'Build error',
-        serverAction: message.action,
-        moduleData,
-      });
-      return;
-    }
-
-    if (['build', 'init', 'check'].includes(message.action)) {
-      this.replaceModiles(moduleData, message.action);
-      return;
-    }
-  }
-}
-
-export const app = () => {
-  /* istanbul ignore next */
-  const sendEvent = eventAdapter<Events>(EVENT_NAME);
-
-  const pageReload = () => {
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
-  };
-
-  const moduleReplacement = new ModuleReplacement({
-    pageReload,
-    sendEvent,
-  });
-
-  const hotModuleClient = new HotModuleClient({
-    sendEvent,
-    pageReload,
-    replaceModiles: moduleReplacement.emit,
-  });
-
+export const app = ({ refresh, sendEvent }: Options) => {
+  const moduleCheck = new ModuleCheck(module.hot);
+  const processMessage = new ProcessMessage(moduleCheck);
   const socketClient = new SocketClient('ws://' + location.host + `/${SERVER_PATH_NAME}`, TIMEOUT);
-
   socketClient
-    .onConnect((client) => {
-      const action: ServerActions = 'init';
-      client.send(action);
+    .onConnect(function (client) {
+      client.send('init');
     })
-    .onReConnect((client) => {
-      const action: ServerActions = 'check';
-      client.send(action);
+    .onReConnect(function (client) {
+      client.send('check');
     })
     .onClose(() => {
+      // Dissconect
       sendEvent({
-        message: 'Server reconnect',
-        moduleData: null,
+        message: 'Disconect',
+        action: 'disconect',
+        refresh: false,
       });
     })
-    .onMessage((message) => {
-      hotModuleClient.emit(message);
+    .onMessage(function (serverMessage) {
+      const message = JSON.parse(serverMessage) as Message;
+      processMessage.getEvent(message).then((event) => {
+        sendEvent(event);
+        if (event.refresh) {
+          refresh();
+        }
+      });
     });
 };

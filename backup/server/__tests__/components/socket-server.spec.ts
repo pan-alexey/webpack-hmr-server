@@ -1,16 +1,17 @@
 /* eslint-disable filenames/match-regex */
 import * as http from 'http';
 import WebSocket from 'ws';
-import { waitForSocketState, startHttpServer } from '../../../common/__mocks__/fixtures';
+import { waitForSocketState, startHttpServer } from '../__mocks__/fixtures';
 
 import { SocketServer } from '../../components/socket-server';
 
-describe('server/socket-server', () => {
+describe('server/WebSocketServer', () => {
   let httpServer: {
     port: number;
     server: http.Server;
     close: () => Promise<unknown>;
   };
+  let httpServerPrort: number;
 
   beforeAll(async () => {
     httpServer = await startHttpServer();

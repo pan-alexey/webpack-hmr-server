@@ -1,18 +1,76 @@
-import webpack from 'webpack';
 import * as http from 'http';
+import webpack from 'webpack';
 
-declare class HotModuleServer {
-  private socketServer;
-  private putStats;
-  constructor(server: http.Server);
-  private listenClinets;
-  private sendBroadcast;
-  private getModuleData;
-  processStats(stats?: webpack.Stats | null): void;
-  processReload(): void;
+declare type Stats = webpack.Stats;
+declare type StatsError = webpack.StatsError;
+declare type General<T> = {
+    client: T;
+    server?: T;
+};
+declare type ActionType = 'init' | 'check' | 'build' | 'refresh';
+interface Data {
+    hash?: string;
+    time?: number;
+    warnings: Array<webpack.StatsError>;
+    errors: Array<webpack.StatsError>;
+}
+declare type BuildState = General<Data>;
+declare type BuildStats = General<Stats>;
+interface Message {
+    action: ActionType;
+    state?: BuildState;
+}
+declare type Modules = Array<string | number>;
+declare type EventMessage = 'unknown' | 'Remote refresh' | 'Not valid state' | 'Hot module reload disable' | 'Update failed' | 'Already update' | 'Modules updated' | 'Build with error' | 'Disconect';
+interface Event {
+    message: EventMessage;
+    action: ActionType | 'disconect';
+    refresh: boolean;
+    state?: BuildState;
+    modules?: Modules;
 }
 
-declare const manual: (serve: http.Server) => HotModuleServer;
-declare const _default: (compiler: webpack.Compiler, serve: http.Server) => void;
+type types_Stats = Stats;
+type types_StatsError = StatsError;
+type types_General<T> = General<T>;
+type types_ActionType = ActionType;
+type types_Data = Data;
+type types_BuildState = BuildState;
+type types_BuildStats = BuildStats;
+type types_Message = Message;
+type types_Modules = Modules;
+type types_EventMessage = EventMessage;
+type types_Event = Event;
+declare namespace types {
+  export {
+    types_Stats as Stats,
+    types_StatsError as StatsError,
+    types_General as General,
+    types_ActionType as ActionType,
+    types_Data as Data,
+    types_BuildState as BuildState,
+    types_BuildStats as BuildStats,
+    types_Message as Message,
+    types_Modules as Modules,
+    types_EventMessage as EventMessage,
+    types_Event as Event,
+  };
+}
 
-export { HotModuleServer, _default as default, manual };
+declare class HotReloadServer {
+    private state;
+    private socketServer;
+    constructor(server: http.Server);
+    private answerResponse;
+    private sendBroadcast;
+    reloadModules(buildStats: BuildStats): void;
+    refresh: () => void;
+}
+
+declare const auto: (compiler: webpack.Compiler, server: http.Server) => {
+    refresh: () => void;
+};
+
+declare const createHotServer: (server: http.Server) => HotReloadServer;
+
+export { types as Types, createHotServer, auto as default };

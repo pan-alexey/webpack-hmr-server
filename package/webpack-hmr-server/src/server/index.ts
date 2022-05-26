@@ -1,18 +1,27 @@
-import webpack from 'webpack';
 import * as http from 'http';
 import { WEBPACK_PLUGIN_NAME } from '../common/constants';
-import { HotModuleServer } from './components/hot-module-service';
+import { HotReloadServer } from './components/hot-reload-server';
+import webpack from 'webpack';
 
-export { HotModuleServer };
+import * as Types from '../common/types';
+export { Types };
 
-export const manual = (serve: http.Server) => {
-  return new HotModuleServer(serve);
+const auto = (compiler: webpack.Compiler /* client compiler*/, server: http.Server): { refresh: () => void } => {
+  const hotServer = new HotReloadServer(server);
+  compiler.hooks.done.tap(WEBPACK_PLUGIN_NAME, (stats: webpack.Stats) => {
+    hotServer.reloadModules({
+      client: stats,
+    });
+  });
+
+  return {
+    refresh: hotServer.refresh,
+  };
 };
 
-export default (compiler: webpack.Compiler, serve: http.Server) => {
-  const hotModuleServer = new HotModuleServer(serve);
+export default auto;
 
-  compiler.hooks.done.tap(WEBPACK_PLUGIN_NAME, (stats: webpack.Stats) => {
-    hotModuleServer.processStats(stats);
-  });
+// factory HotReloadServer
+export const createHotServer = (server: http.Server): HotReloadServer => {
+  return new HotReloadServer(server);
 };
