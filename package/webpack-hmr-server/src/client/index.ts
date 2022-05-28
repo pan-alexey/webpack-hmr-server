@@ -23,6 +23,7 @@ export const app = ({ refresh, sendEvent }: Options) => {
     .onClose(() => {
       // Dissconect
       sendEvent({
+        hotEnable: moduleCheck.hotEnable(),
         message: 'Disconect',
         action: 'disconect',
         refresh: false,

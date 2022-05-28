@@ -24,6 +24,7 @@ declare type Modules = Array<string | number>;
 declare type EventMessage = 'unknown' | 'Remote refresh' | 'Not valid state' | 'Hot module reload disable' | 'Update failed' | 'Already update' | 'Modules updated' | 'Build with error' | 'Disconect';
 interface Event {
     message: EventMessage;
+    hotEnable: boolean;
     action: ActionType | 'disconect';
     refresh: boolean;
     state?: BuildState;
