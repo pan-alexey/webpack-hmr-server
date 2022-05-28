@@ -17,6 +17,7 @@ export class ProcessMessage {
     const state: Event = {
       message: 'unknown',
       refresh: false,
+      hotEnable: this.moduleCheck.hotEnable(),
       state: remoteMessage.state,
       action: remoteMessage.action,
       modules: [],

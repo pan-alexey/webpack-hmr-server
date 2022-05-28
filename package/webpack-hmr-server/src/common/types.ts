@@ -44,6 +44,7 @@ export type EventMessage =
 
 export interface Event {
   message: EventMessage;
+  hotEnable: boolean;
   action: ActionType | 'disconect';
   refresh: boolean;
   state?: BuildState;

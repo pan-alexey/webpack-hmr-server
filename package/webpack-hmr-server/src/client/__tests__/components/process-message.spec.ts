@@ -14,7 +14,7 @@ describe('client/process-message', () => {
     Object.assign(global, { __webpack_hash__: '1' });
 
     // Fixtures
-    const moduleHot = new ModuleHotFixtures({ nullable: false });
+    const moduleHot = new ModuleHotFixtures({ nullable: false, moduleHot: false });
     const moduleCheck = new ModuleCheck(moduleHot as unknown as __WebpackModuleApi.Hot);
     const processMessage = new ProcessMessage(moduleCheck);
 
@@ -24,6 +24,7 @@ describe('client/process-message', () => {
 
     expect(event).toEqual({
       message: 'Remote refresh',
+      hotEnable: true,
       refresh: true,
       action: 'refresh',
       modules: [],
@@ -44,6 +45,7 @@ describe('client/process-message', () => {
 
     expect(event).toEqual({
       message: 'Not valid state',
+      hotEnable: true,
       refresh: false,
       action: 'init',
       modules: [],
@@ -77,6 +79,7 @@ describe('client/process-message', () => {
     expect(event).toEqual({
       message: 'Already update',
       refresh: false,
+      hotEnable: true,
       state: { client: { hash: '1', warnings: [], errors: [] } },
       action: 'init',
       modules: [],
@@ -123,6 +126,7 @@ describe('client/process-message', () => {
     expect(eventClient).toEqual({
       message: 'Build with error',
       refresh: false,
+      hotEnable: true,
       state: { client: { warnings: [], errors: ['123'] } },
       action: 'init',
       modules: [],
@@ -130,6 +134,7 @@ describe('client/process-message', () => {
 
     expect(eventServer).toEqual({
       message: 'Build with error',
+      hotEnable: true,
       refresh: false,
       state: {
         client: { warnings: [], errors: [] },
@@ -171,6 +176,7 @@ describe('client/process-message', () => {
 
     expect(event).toEqual({
       message: 'Modules updated',
+      hotEnable: true,
       refresh: false,
       state: { client: { hash: '3', warnings: [], errors: [] } },
       action: 'init',
@@ -204,6 +210,7 @@ describe('client/process-message', () => {
     expect(event).toEqual({
       message: 'Hot module reload disable',
       refresh: true,
+      hotEnable: false,
       state: { client: { hash: '3', warnings: [], errors: [] } },
       action: 'init',
       modules: [],
@@ -236,6 +243,7 @@ describe('client/process-message', () => {
 
     expect(event).toEqual({
       message: 'Update failed',
+      hotEnable: true,
       refresh: true,
       state: { client: { hash: '3', warnings: [], errors: [] } },
       action: 'init',

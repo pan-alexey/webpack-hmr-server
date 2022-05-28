@@ -39,7 +39,7 @@ export class ModuleCheck {
     }
   };
 
-  public hotEnable = () => {
+  public hotEnable = (): boolean => {
     return !!this.moduleHot;
   };
 }

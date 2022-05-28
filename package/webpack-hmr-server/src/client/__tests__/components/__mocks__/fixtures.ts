@@ -6,10 +6,12 @@ export class ModuleHotFixtures {
   private nullable;
   private moduleIndex = 0;
   private updateWebpackHash;
+  private moduleHot = false;
 
-  constructor({ nullable = true, updateWebpackHash = false }) {
+  constructor({ nullable = true, updateWebpackHash = false, moduleHot = false }) {
     this.nullable = nullable;
     this.updateWebpackHash = updateWebpackHash;
+    this.moduleHot = moduleHot;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
