@@ -11,7 +11,7 @@ beforeEach(() => {
 
 describe('client/process-message', () => {
   it('Remote refresh', async () => {
-    Object.assign(global, { __webpack_hash__: '1' });
+    Object.assign(global, { __webpack_hash__: '1', __resourceQuery: 'resourceQuery' });
 
     // Fixtures
     const moduleHot = new ModuleHotFixtures({ nullable: false, moduleHot: false });
@@ -23,6 +23,7 @@ describe('client/process-message', () => {
     });
 
     expect(event).toEqual({
+      resourceQuery: 'resourceQuery',
       message: 'Remote refresh',
       hotEnable: true,
       refresh: true,
@@ -32,7 +33,7 @@ describe('client/process-message', () => {
   });
 
   it('Not valid state', async () => {
-    Object.assign(global, { __webpack_hash__: '1' });
+    Object.assign(global, { __webpack_hash__: '1', __resourceQuery: 'resourceQuery' });
 
     // Fixtures
     const moduleHot = new ModuleHotFixtures({ nullable: false });
@@ -44,6 +45,7 @@ describe('client/process-message', () => {
     });
 
     expect(event).toEqual({
+      resourceQuery: 'resourceQuery',
       message: 'Not valid state',
       hotEnable: true,
       refresh: false,
@@ -53,7 +55,7 @@ describe('client/process-message', () => {
   });
 
   it('Already update', async () => {
-    Object.assign(global, { __webpack_hash__: '1' });
+    Object.assign(global, { __webpack_hash__: '1', __resourceQuery: 'resourceQuery' });
 
     // fixtures
     const moduleHot = new ModuleHotFixtures({
@@ -77,6 +79,7 @@ describe('client/process-message', () => {
     });
 
     expect(event).toEqual({
+      resourceQuery: 'resourceQuery',
       message: 'Already update',
       refresh: false,
       hotEnable: true,
@@ -87,7 +90,7 @@ describe('client/process-message', () => {
   });
 
   it('Build with error', async () => {
-    Object.assign(global, { __webpack_hash__: '1' });
+    Object.assign(global, { __webpack_hash__: '1', __resourceQuery: 'resourceQuery' });
 
     // fixtures
     const moduleHot = new ModuleHotFixtures({
@@ -124,6 +127,7 @@ describe('client/process-message', () => {
     });
 
     expect(eventClient).toEqual({
+      resourceQuery: 'resourceQuery',
       message: 'Build with error',
       refresh: false,
       hotEnable: true,
@@ -133,6 +137,7 @@ describe('client/process-message', () => {
     });
 
     expect(eventServer).toEqual({
+      resourceQuery: 'resourceQuery',
       message: 'Build with error',
       hotEnable: true,
       refresh: false,
@@ -146,7 +151,7 @@ describe('client/process-message', () => {
   });
 
   it('Modules updated', async () => {
-    Object.assign(global, { __webpack_hash__: 0 });
+    Object.assign(global, { __webpack_hash__: 0, __resourceQuery: 'resourceQuery' });
 
     // fixtures
     const moduleHot = new ModuleHotFixtures({
@@ -175,6 +180,7 @@ describe('client/process-message', () => {
     });
 
     expect(event).toEqual({
+      resourceQuery: 'resourceQuery',
       message: 'Modules updated',
       hotEnable: true,
       refresh: false,
@@ -185,7 +191,7 @@ describe('client/process-message', () => {
   });
 
   it('Hot module reload disable', async () => {
-    Object.assign(global, { __webpack_hash__: 0 });
+    Object.assign(global, { __webpack_hash__: 0, __resourceQuery: 'resourceQuery' });
 
     // Note
     // Т/к мы запускаем проверку модулей с авто применением,
@@ -208,6 +214,7 @@ describe('client/process-message', () => {
     });
 
     expect(event).toEqual({
+      resourceQuery: 'resourceQuery',
       message: 'Hot module reload disable',
       refresh: true,
       hotEnable: false,
@@ -218,7 +225,7 @@ describe('client/process-message', () => {
   });
 
   it('module.hot:null', async () => {
-    Object.assign(global, { __webpack_hash__: '' });
+    Object.assign(global, { __webpack_hash__: '', __resourceQuery: 'resourceQuery' });
 
     // fixtures
     const moduleHot = new ModuleHotFixtures({
@@ -242,6 +249,7 @@ describe('client/process-message', () => {
     });
 
     expect(event).toEqual({
+      resourceQuery: 'resourceQuery',
       message: 'Update failed',
       hotEnable: true,
       refresh: true,

@@ -43,6 +43,7 @@ export type EventMessage =
   | 'Disconect';
 
 export interface Event {
+  resourceQuery: string;
   message: EventMessage;
   hotEnable: boolean;
   action: ActionType | 'disconect';

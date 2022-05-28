@@ -15,6 +15,7 @@ export class ProcessMessage {
 
   private processEvent = async (remoteMessage: Message): Promise<Event> => {
     const state: Event = {
+      resourceQuery: __resourceQuery || '',
       message: 'unknown',
       refresh: false,
       hotEnable: this.moduleCheck.hotEnable(),
