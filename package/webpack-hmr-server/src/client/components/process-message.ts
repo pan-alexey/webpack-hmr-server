@@ -15,7 +15,7 @@ export class ProcessMessage {
 
   private processEvent = async (remoteMessage: Message): Promise<Event> => {
     const state: Event = {
-      resourceQuery: __resourceQuery || '',
+      resourceQuery: __resourceQuery,
       message: 'unknown',
       refresh: false,
       hotEnable: this.moduleCheck.hotEnable(),
@@ -23,6 +23,12 @@ export class ProcessMessage {
       action: remoteMessage.action,
       modules: [],
     };
+
+    if (remoteMessage.action === 'disconect') {
+      state.message = 'Disconect';
+      state.refresh = false;
+      return state;
+    }
 
     if (remoteMessage.action === 'refresh') {
       state.message = 'Remote refresh';

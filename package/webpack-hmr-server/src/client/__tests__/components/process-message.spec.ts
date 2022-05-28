@@ -10,6 +10,28 @@ beforeEach(() => {
 });
 
 describe('client/process-message', () => {
+  it('Disconect', async () => {
+    Object.assign(global, { __webpack_hash__: '1', __resourceQuery: 'resourceQuery' });
+
+    // Fixtures
+    const moduleHot = new ModuleHotFixtures({ nullable: false, moduleHot: false });
+    const moduleCheck = new ModuleCheck(moduleHot as unknown as __WebpackModuleApi.Hot);
+    const processMessage = new ProcessMessage(moduleCheck);
+
+    const event = await processMessage.getEvent({
+      action: 'disconect',
+    });
+
+    expect(event).toEqual({
+      resourceQuery: 'resourceQuery',
+      message: 'Disconect',
+      hotEnable: true,
+      refresh: false,
+      action: 'disconect',
+      modules: [],
+    });
+  });
+
   it('Remote refresh', async () => {
     Object.assign(global, { __webpack_hash__: '1', __resourceQuery: 'resourceQuery' });
 

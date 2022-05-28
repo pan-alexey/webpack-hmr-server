@@ -12,7 +12,8 @@ export type ActionType =
   | 'init' // First init client (connect to server and recive ping message)
   | 'check' // If client reconnect, check build hash
   | 'build' // When webpack rebuild
-  | 'refresh'; // remote pages refresh
+  | 'refresh' // remote pages refresh
+  | 'disconect';
 
 export interface Data {
   hash?: string;
@@ -46,7 +47,7 @@ export interface Event {
   resourceQuery: string;
   message: EventMessage;
   hotEnable: boolean;
-  action: ActionType | 'disconect';
+  action: ActionType;
   refresh: boolean;
   state?: BuildState;
   modules?: Modules;

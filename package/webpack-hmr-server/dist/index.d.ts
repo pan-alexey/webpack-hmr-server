@@ -7,7 +7,7 @@ declare type General<T> = {
     client: T;
     server?: T;
 };
-declare type ActionType = 'init' | 'check' | 'build' | 'refresh';
+declare type ActionType = 'init' | 'check' | 'build' | 'refresh' | 'disconect';
 interface Data {
     hash?: string;
     time?: number;
@@ -23,9 +23,10 @@ interface Message {
 declare type Modules = Array<string | number>;
 declare type EventMessage = 'unknown' | 'Remote refresh' | 'Not valid state' | 'Hot module reload disable' | 'Update failed' | 'Already update' | 'Modules updated' | 'Build with error' | 'Disconect';
 interface Event {
+    resourceQuery: string;
     message: EventMessage;
     hotEnable: boolean;
-    action: ActionType | 'disconect';
+    action: ActionType;
     refresh: boolean;
     state?: BuildState;
     modules?: Modules;

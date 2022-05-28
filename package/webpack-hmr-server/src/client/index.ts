@@ -22,12 +22,11 @@ export const app = ({ refresh, sendEvent }: Options) => {
     })
     .onClose(() => {
       // Dissconect
-      sendEvent({
-        hotEnable: moduleCheck.hotEnable(),
-        message: 'Disconect',
-        action: 'disconect',
-        refresh: false,
-      });
+      processMessage
+        .getEvent({
+          action: 'disconect',
+        })
+        .then(sendEvent);
     })
     .onMessage(function (serverMessage) {
       const message = JSON.parse(serverMessage) as Message;
