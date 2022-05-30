@@ -6,7 +6,7 @@ Webpack hot reloading using http server and websocket
 ![licence](https://img.shields.io/badge/licence-MIT-green)
 
 ![test](https://img.shields.io/badge/ReactJS-success-green)
-![test](https://img.shields.io/badge/VueJS-wait-red)
+![test](https://img.shields.io/badge/VueJS-todo-red)
 ![test](https://img.shields.io/badge/VanillaJS-done-green)
 
 ### Module Server 
@@ -63,6 +63,20 @@ new webpack.EntryPlugin(compiler.context, "webpack-hmr-server/client.legacy.js",
 server.listen(port, callback)
 ```
 
+
+## Example usage for create custom overlay
+
+```ts
+import type { Types } from 'webpack-hmr-server';
+
+document.addEventListener("__webpack_hmr_sever__", (e) => {
+  const { detail } = e as unknown as { detail: unknown };
+  const event = detail as Types.Event;
+
+  // custom logic for overlay
+})
+```
+
 - - -
 
 ## How it Works
@@ -87,7 +101,7 @@ If you run webpack in watch and HMR mode, then for each update of the source fil
 
 The update manifest is a json file containing the new compilation hash and a list of updated files. The compilation hash is generated during the bundle build and passed to the HMR runtime.
 
-if module.hot.check(true) is called in a running application, then a request for JSON will be sent. If successful, modules will be updated
+if ```module.hot.check(true)``` is called in a running application, then a request for JSON will be sent. If successful, modules will be updated
 
 - - -
 
