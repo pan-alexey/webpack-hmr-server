@@ -65,6 +65,7 @@ declare namespace types {
   };
 }
 
+declare const statsToData: (stats?: webpack.Stats | undefined) => Data | undefined;
 declare class HotReloadServer {
     private state;
     private socketServer;
@@ -75,10 +76,9 @@ declare class HotReloadServer {
     refresh: () => void;
 }
 
-declare const auto: (compiler: webpack.Compiler, server: http.Server) => {
+declare const createHotServer: (server: http.Server) => HotReloadServer;
+declare const _default: (compiler: webpack.Compiler, server: http.Server) => {
     refresh: () => void;
 };
 
-declare const createHotServer: (server: http.Server) => HotReloadServer;
-
-export { types as Types, createHotServer, auto as default };
+export { types as Types, createHotServer, _default as default, statsToData };

@@ -57,11 +57,3 @@ export interface Event {
   state?: BuildState;
   modules?: Modules;
 }
-
-// export interface Events {
-//   message: string;
-//   serverAction?: ServerActions;
-//   updatedModules?: Modules;
-//   stack?: string;
-//   moduleData: ModuleData | null;
-// }

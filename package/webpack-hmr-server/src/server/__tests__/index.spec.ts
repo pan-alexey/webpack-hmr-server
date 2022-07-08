@@ -6,8 +6,9 @@ import { SERVER_PATH_NAME } from '../../common/constants';
 import { waitForSocketState, startHttpServer } from '../../common/__mocks__/fixtures';
 
 import webpackHmrServer from '../index';
-import { createHotServer } from '../index';
+import { createHotServer, statsToData } from '../index';
 import { HotReloadServer } from '../components/hot-reload-server';
+import { Data } from '../../common/types';
 
 const webpackConfig: webpack.Configuration = {
   entry: '/index.js',
@@ -31,6 +32,30 @@ describe('server/index', () => {
     expect(hotServer).toBeInstanceOf(HotReloadServer);
 
     httpServer.close();
+  });
+
+  it('statsToData', async () => {
+    expect(statsToData()).toBe(undefined);
+
+    const { compiler, fs } = webpackFixture(webpackConfig);
+    fs.writeFileSync('/index.js', `const text='test'; console.log(text`);
+    const stats = await new Promise((resolve) => {
+      compiler.run((err, stats) => {
+        resolve(stats);
+      });
+    });
+
+    const data = statsToData(stats as webpack.Stats) as Data;
+
+    expect(data).toStrictEqual({
+      hash: expect.any(String),
+      time: expect.any(Number),
+      warnings: expect.any(Array),
+      errors: expect.any(Array),
+    });
+
+    expect(data.warnings.length).toBe(0);
+    expect(data.errors.length).not.toBe(0);
   });
 
   it('default', async () => {
