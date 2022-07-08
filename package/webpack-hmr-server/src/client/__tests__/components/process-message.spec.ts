@@ -2,7 +2,7 @@
 import { ProcessMessage } from '../../components/process-message';
 import { ModuleCheck } from '../../components/hot-replace';
 import { ModuleHotFixtures } from './__mocks__/fixtures';
-import { StatsError } from 'webpack';
+import { DataStatsError } from '../../../common/types';
 
 beforeEach(() => {
   // delete global.module?.hot;
@@ -129,7 +129,7 @@ describe('client/process-message', () => {
       state: {
         client: {
           warnings: [],
-          errors: ['123' as unknown as StatsError],
+          errors: ['123' as unknown as DataStatsError],
         },
       },
     });
@@ -143,7 +143,7 @@ describe('client/process-message', () => {
         },
         server: {
           warnings: [],
-          errors: ['123' as unknown as StatsError],
+          errors: ['123' as unknown as DataStatsError],
         },
       },
     });

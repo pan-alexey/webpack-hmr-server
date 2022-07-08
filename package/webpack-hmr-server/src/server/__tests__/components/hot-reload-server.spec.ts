@@ -5,7 +5,13 @@ import webpackFixture from 'webpack-fixture';
 import { waitForSocketState, startHttpServer } from '../../../common/__mocks__/fixtures';
 
 import { SERVER_PATH_NAME } from '../../../common/constants';
-import { processMessage, statsToData, buildStatsToState, HotReloadServer } from '../../components/hot-reload-server';
+import {
+  processMessage,
+  statsToData,
+  buildStatsToState,
+  HotReloadServer,
+  getErrorName,
+} from '../../components/hot-reload-server';
 import { Data } from '../../../common/types';
 
 const webpackConfig: webpack.Configuration = {
@@ -58,6 +64,38 @@ describe('server/hot-reload-server', () => {
         },
       },
     });
+  });
+
+  it('getErrorName', async () => {
+    const err1: webpack.StatsError = {
+      message: 'line1\nline2',
+    };
+    expect(getErrorName(err1)).toBe('line1');
+
+    const err2: webpack.StatsError = {
+      message: 'line1\nline2',
+      moduleName: 'moduleName',
+      file: 'file',
+      loc: '1-2:3',
+    };
+
+    expect(getErrorName(err2)).toBe('moduleName:1');
+
+    const err3: webpack.StatsError = {
+      message: 'line1\nline2',
+      file: 'file',
+      loc: '1-2:3',
+    };
+
+    expect(getErrorName(err3)).toBe('file:1');
+
+    const err4: webpack.StatsError = {
+      message: 'line1\nline2',
+      file: 'file',
+      loc: '',
+    };
+
+    expect(getErrorName(err4)).toBe('file');
   });
 
   it('statsToData', async () => {

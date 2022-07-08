@@ -15,11 +15,16 @@ export type ActionType =
   | 'refresh' // remote pages refresh
   | 'disconect';
 
+export interface DataStatsError extends webpack.StatsError {
+  _name_: string; // ( moduleName + location ) || First line string
+  _hash_: string; // moduleName + location
+}
+
 export interface Data {
   hash?: string;
   time?: number;
-  warnings: Array<webpack.StatsError>;
-  errors: Array<webpack.StatsError>;
+  warnings: Array<DataStatsError>;
+  errors: Array<DataStatsError>;
 }
 
 export type BuildState = General<Data>;

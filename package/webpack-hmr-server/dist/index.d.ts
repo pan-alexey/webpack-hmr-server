@@ -8,11 +8,15 @@ declare type General<T> = {
     server?: T;
 };
 declare type ActionType = 'init' | 'check' | 'build' | 'refresh' | 'disconect';
+interface DataStatsError extends webpack.StatsError {
+    _name_: string;
+    _hash_: string;
+}
 interface Data {
     hash?: string;
     time?: number;
-    warnings: Array<webpack.StatsError>;
-    errors: Array<webpack.StatsError>;
+    warnings: Array<DataStatsError>;
+    errors: Array<DataStatsError>;
 }
 declare type BuildState = General<Data>;
 declare type BuildStats = General<Stats>;
@@ -36,6 +40,7 @@ type types_Stats = Stats;
 type types_StatsError = StatsError;
 type types_General<T> = General<T>;
 type types_ActionType = ActionType;
+type types_DataStatsError = DataStatsError;
 type types_Data = Data;
 type types_BuildState = BuildState;
 type types_BuildStats = BuildStats;
@@ -49,6 +54,7 @@ declare namespace types {
     types_StatsError as StatsError,
     types_General as General,
     types_ActionType as ActionType,
+    types_DataStatsError as DataStatsError,
     types_Data as Data,
     types_BuildState as BuildState,
     types_BuildStats as BuildStats,
