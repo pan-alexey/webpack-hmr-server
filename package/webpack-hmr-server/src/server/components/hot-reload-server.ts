@@ -14,13 +14,24 @@ export const processMessage = (action: ActionType, state?: BuildState): string =
   });
 };
 
+export const normalizeModuleName = (moduleName: string) => {
+  // https://webpack.js.org/api/loaders/
+  const match = moduleName.match(/\.webpack\[(.*?)\]!=!/i);
+
+  if (match && match.index) {
+    return moduleName.slice(0, match.index);
+  }
+  return moduleName;
+};
+
 export const getErrorName = (error: webpack.StatsError): string => {
   const moduleName = error.moduleName || error.file;
+
   if (moduleName) {
-    const loc = error.loc ? `:${parseInt(error.loc)}` : '';
-    return `${moduleName}${loc}`;
+    return normalizeModuleName(moduleName);
   }
 
+  // first line in message
   return error.message.split('\n')[0];
 };
 

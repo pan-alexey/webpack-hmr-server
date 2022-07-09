@@ -11,6 +11,7 @@ import {
   buildStatsToState,
   HotReloadServer,
   getErrorName,
+  normalizeModuleName,
 } from '../../components/hot-reload-server';
 import { Data } from '../../../common/types';
 
@@ -66,6 +67,28 @@ describe('server/hot-reload-server', () => {
     });
   });
 
+  it('normalizeModuleName', async () => {
+    expect(
+      normalizeModuleName(
+        './src/index.scss.webpack[javascript/auto]!=!../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!../../node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[1].use[2]!./src/index.scss',
+      ),
+    ).toBe('./src/index.scss');
+
+    expect(
+      normalizeModuleName(
+        './src/index.scss.webpack[******]!=!../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!../../node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[1].use[2]!./src/index.scss',
+      ),
+    ).toBe('./src/index.scss');
+
+    expect(
+      normalizeModuleName(
+        './src/index.scss.webpack[javascript/auto]=!../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!../../node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[1].use[2]!./src/index.scss',
+      ),
+    ).toBe(
+      './src/index.scss.webpack[javascript/auto]=!../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!../../node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[1].use[2]!./src/index.scss',
+    );
+  });
+
   it('getErrorName', async () => {
     const err1: webpack.StatsError = {
       message: 'line1\nline2',
@@ -74,12 +97,13 @@ describe('server/hot-reload-server', () => {
 
     const err2: webpack.StatsError = {
       message: 'line1\nline2',
-      moduleName: 'moduleName',
+      moduleName:
+        './src/index.scss.webpack[javascript/auto]!=!../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!../../node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[1].use[2]!./src/index.scss',
       file: 'file',
       loc: '1-2:3',
     };
 
-    expect(getErrorName(err2)).toBe('moduleName:1');
+    expect(getErrorName(err2)).toBe('./src/index.scss');
 
     const err3: webpack.StatsError = {
       message: 'line1\nline2',
@@ -87,15 +111,7 @@ describe('server/hot-reload-server', () => {
       loc: '1-2:3',
     };
 
-    expect(getErrorName(err3)).toBe('file:1');
-
-    const err4: webpack.StatsError = {
-      message: 'line1\nline2',
-      file: 'file',
-      loc: '',
-    };
-
-    expect(getErrorName(err4)).toBe('file');
+    expect(getErrorName(err3)).toBe('file');
   });
 
   it('statsToData', async () => {
